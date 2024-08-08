@@ -2,14 +2,16 @@
   "name": "api-crud",
   "version": "1.0.0",
   "main": "crud-node.js",
- "type": "module",
+  "type": "module",
   "scripts": {
-    "start": "node server.js"
+    "start": "nodemon  src/server.js"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "express": "^4.19.2"
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "nodemon": "^3.1.4"
   }
 }
