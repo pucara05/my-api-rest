@@ -1,28 +1,29 @@
-import swaggerJsdoc from 'swagger-jsdoc';
+import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 
-const swaggerDefinition = {
-  openapi: '3.0.0',
-  info: {
-    title: 'API CRUD',
-    version: '1.0.0',
-    description: 'A simple CRUD API',
+const setupSwagger = (app) => {
+  const swaggerOptions = {
+    definition: {
+      openapi: '3.0.0',
+      info: {
+        title: 'CRUD API',
+        version: '1.0.0',
+        description: 'A simple CRUD API',
+      },
+   servers: [
+  {
+    url: `http://localhost:${process.env.PORT || 3000}/api`,
+    description: 'Local server',
   },
-  servers: [
-    {
-      url: 'http://localhost:3000/api',
-      description: 'Local server',
+],
+
     },
-  ],
-};
+ apis: ['./src/routes/*.js'], // Asegúrate de que esta ruta sea correcta
+  };
 
-const options = {
-  swaggerDefinition,
-  apis: ['./src/routes/index.js'], // Ruta a los archivos con comentarios Swagger
-};
+  const swaggerSpec = swaggerJsDoc(swaggerOptions);
 
-const swaggerSpec = swaggerJsdoc(options);
-
-export default function setupSwagger(app) {
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-}
+};
+
+export default setupSwagger;
