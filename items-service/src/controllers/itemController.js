@@ -33,49 +33,49 @@ export const getUsuarioById = async (req, res) => {
 
 
 export const createUsuario = async (req, res) => {
-    try {
-        const { nombre, correo } = req.body;
+  try {
+    const { nombre, correo } = req.body;
 
-        if (!nombre || !correo) {
-            return res.status(400).json({ error: 'Los campos nombre y correo son obligatorios' });
-        }
-
-        const [result] = await promisePool.query('INSERT INTO usuarios (nombre, correo) VALUES (?, ?)', [nombre, correo]);
-
-        res.status(201).json({ id: result.insertId, nombre, correo });
-    } catch (error) {
-        console.error('Error al crear el usuario:', error);
-        res.status(500).json({ error: 'Error interno del servidor' });
+    if (!nombre || !correo) {
+      return res.status(400).json({ error: 'Los campos nombre y correo son obligatorios' });
     }
+
+    const [result] = await promisePool.query('INSERT INTO usuarios (nombre, correo) VALUES (?, ?)', [nombre, correo]);
+
+    res.status(201).json({ id: result.insertId, nombre, correo });
+  } catch (error) {
+    console.error('Error al crear el usuario:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
 };
 
 
 
 export const updateUsuario = async (req, res) => {
-    const { id } = req.params;
-    const { nombre, correo } = req.body;
-    
-    console.log('Datos recibidos:', req.body);
+  const { id } = req.params;
+  const { nombre, correo } = req.body;
 
-    if (!nombre || !correo) {
-        return res.status(400).json({ error: 'Faltan datos en la solicitud' });
+  console.log('Datos recibidos:', req.body);
+
+  if (!nombre || !correo) {
+    return res.status(400).json({ error: 'Faltan datos en la solicitud' });
+  }
+
+  try {
+    const [result] = await promisePool.query(
+      'UPDATE usuarios SET nombre = ?, correo = ? WHERE id = ?',
+      [nombre, correo, id]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
     }
 
-    try {
-        const [result] = await promisePool.query(
-            'UPDATE usuarios SET nombre = ?, correo = ? WHERE id = ?',
-            [nombre, correo, id]
-        );
-
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ error: 'Usuario no encontrado' });
-        }
-
-        res.json({ message: 'Usuario actualizado correctamente' });
-    } catch (error) {
-        console.error('Error al actualizar el usuario:', error);
-        res.status(500).json({ error: 'Error interno del servidor' });
-    }
+    res.json({ message: 'Usuario actualizado correctamente' });
+  } catch (error) {
+    console.error('Error al actualizar el usuario:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
 };
 
 

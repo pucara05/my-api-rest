@@ -1,7 +1,8 @@
 {
-  "name": "api-crud",
+  "name": " items-service ",
   "version": "1.0.0",
-  "main": "crud-node.js",
+  "main": "src/server.js", 
+  "description": "Microservicio para gestionar items",
   "type": "module",
   "scripts": {
     "start": "nodemon  src/server.js"
