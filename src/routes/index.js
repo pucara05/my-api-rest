@@ -1,17 +1,24 @@
 import express from 'express';
+import { createUsuario, getUsuarios, getUsuarioById, updateUsuario, deleteUsuario } from '../controllers/itemController.js'; // Asegúrate de que la ruta sea correcta
+
+/*
 import {
-  getItems,getItemById,createItem,updateItem,deleteItem
-} from '../controllers/itemController.js'; // Asegúrate de usar el nombre correcto del archivo
+  getItems,
+  getItemById,
+  createItem,
+  updateItem,
+  deleteItem, 
+} from '../controllers/itemController.js'; // Asegúrate de usar el nombre correcto del archivo  */
 
 
 const router = express.Router();
 
 /**
  * @swagger
- * /items:
+ * /usuarios:
  *   get:
  *     summary: Retrieve a list of items
- *     description: Fetches a list of items from the database. Each item contains an id and a name.
+ *     description: Fetches a list of items from the database. Each item contains an id, name, and email.
  *     responses:
  *       200:
  *         description: A list of items
@@ -24,22 +31,72 @@ const router = express.Router();
  *                 properties:
  *                   id:
  *                     type: integer
- *                   name:
+ *                   nombre:
+ *                     type: string
+ *                   correo:
  *                     type: string
  *             example:
  *               - id: 1
- *                 name: "Item One"
+ *                 name: "John Doe"
+ *                 email: "john.doe@example.com"
  *               - id: 2
- *                 name: "Item Two"
+ *                 name: "Jane Doe"
+ *                 email: "jane.doe@example.com"
  *       500:
  *         description: Internal server error
  */
-router.get('/items', getItems);
+router.get('/usuarios', getUsuarios);
 
 
 /**
  * @swagger
- * /items/{id}:
+ * /usuarios:
+ *   post:
+ *     summary: Create a new item
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nombre:
+ *                 type: string
+ *               correo:
+ *                 type: string
+ *             required:
+ *               - name
+ *               - email
+ *     responses:
+ *       201:
+ *         description: Item created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                 name:
+ *                   type: string
+ *                 email:
+ *                   type: string
+ *               required:
+ *                 - id
+ *                 - name
+ *                 - email
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
+ */
+router.post('/usuarios', createUsuario);
+
+
+
+/**
+ * @swagger
+ * /usuarios/{id}:
  *   get:
  *     summary: Retrieve an item by ID
  *     parameters:
@@ -60,45 +117,20 @@ router.get('/items', getItems);
  *                   type: integer
  *                 name:
  *                   type: string
+ *                 email:
+ *                   type: string
  *       404:
  *         description: Item not found
+ *       500:
+ *         description: Internal server error
  */
-  router.get('/items/:id', getItemById);
+router.get('/usuarios/:id', getUsuarioById);
 
 /**
  * @swagger
- * /items:
- *   post:
- *     summary: Create a new item
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *     responses:
- *       201:
- *         description: Item created
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: integer
- *                 name:
- *                   type: string
- */
-  router.post('/items', createItem);
-
-/**
- * @swagger
- * /items/{id}:
+ * /usuarios/{id}:
  *   put:
- *     summary: Update an existing item
+ *     summary: Update an existing user
  *     parameters:
  *       - in: path
  *         name: id
@@ -112,11 +144,16 @@ router.get('/items', getItems);
  *           schema:
  *             type: object
  *             properties:
- *               name:
+ *               nombre:
  *                 type: string
+ *               correo:
+ *                 type: string
+ *             required:
+ *               - nombre
+ *               - correo
  *     responses:
  *       200:
- *         description: Item updated
+ *         description: User updated successfully
  *         content:
  *           application/json:
  *             schema:
@@ -124,16 +161,22 @@ router.get('/items', getItems);
  *               properties:
  *                 id:
  *                   type: integer
- *                 name:
+ *                 nombre:
+ *                   type: string
+ *                 correo:
  *                   type: string
  *       404:
- *         description: Item not found
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
  */
- router.put('/items/:id', updateItem);
+
+router.put('/usuarios/:id', updateUsuario);
+
 
 /**
  * @swagger
- * /items/{id}:
+ * /usuarios/{id}:
  *   delete:
  *     summary: Delete an item
  *     parameters:
@@ -147,7 +190,9 @@ router.get('/items', getItems);
  *         description: Item deleted
  *       404:
  *         description: Item not found
+ *       500:
+ *         description: Internal server error
  */
-  router.delete('/items/:id', deleteItem);
+router.delete('/usuarios/:id', deleteUsuario);
 
 export default router;
